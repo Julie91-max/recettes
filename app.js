@@ -19,7 +19,8 @@
   // Le carnet = la famille. Son identifiant secret est dans le lien de partage.
   let carnet = ls.get('carnet', null);
   const store = {
-    headers(extra) { return Object.assign({ apikey: CFG.SUPABASE_ANON_KEY, Authorization: 'Bearer ' + CFG.SUPABASE_ANON_KEY, 'x-carnet': carnet }, extra || {}); },
+    // Cle "publishable" (sb_publishable_...) : apikey suffit ; ancienne cle JWT (eyJ...) : aussi en Authorization
+    headers(extra) { const h = { apikey: CFG.SUPABASE_ANON_KEY, 'x-carnet': carnet }; if (/^eyJ/.test(CFG.SUPABASE_ANON_KEY)) h.Authorization = 'Bearer ' + CFG.SUPABASE_ANON_KEY; return Object.assign(h, extra || {}); },
     async rest(path, opts) {
       const res = await fetch(CFG.SUPABASE_URL + '/rest/v1/' + path, Object.assign({}, opts, { headers: this.headers(Object.assign({ 'Content-Type': 'application/json' }, opts && opts.headers)) }));
       if (!res.ok) { const t = await res.text().catch(() => ''); throw new Error('HTTP ' + res.status + ' ' + t.slice(0, 120)); }
