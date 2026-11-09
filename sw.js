@@ -1,6 +1,6 @@
 // Service worker : l'appli (coquille) est mise en cache pour marcher hors ligne ;
 // les appels Supabase passent toujours par le reseau.
-const CACHE = 'recettes-v1';
+const CACHE = 'recettes-v2';
 const SHELL = ['./', './index.html', './styles.css', './app.js', './config.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
